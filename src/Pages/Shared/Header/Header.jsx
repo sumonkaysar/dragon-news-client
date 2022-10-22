@@ -1,12 +1,24 @@
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useContext } from "react";
+import { Button, Container, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 import LeftSideNav from "../LeftSideNav/LeftSideNav";
 import './Header.css';
 
 const Header = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut()
+    .then(() => console.log('logged out'))
+    .catch(err => console.error(err))
+  }
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark" fixed="top">
       <Container>
-        <Navbar.Brand href="#home">Dragon News</Navbar.Brand>
+        <Link to='/'><Navbar.Brand>Dragon News</Navbar.Brand></Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -25,10 +37,36 @@ const Header = () => {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets">More deets</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-              Dank memes
+            <Nav.Link>
+              {
+                user?.photoURL ?
+                <Image
+                  src={user.photoURL}
+                  style={{ width: "30px" }}
+                  roundedCircle
+                /> :
+                
+                <FaUser />
+              }
             </Nav.Link>
+            {
+              user?.uid ?
+              <>
+                <Nav.Link>{user?.displayName}</Nav.Link>
+                <Button
+                  onClick={handleLogout}
+                  className="py-0"
+                  size="sm"
+                  variant="outline-light"
+                  style={{ height: "30px", marginTop: "7px" }}
+                >Logout</Button>
+              </>
+              :
+              <>
+                <Nav.Link as={Link} to='/login'>Login</Nav.Link>
+                <Nav.Link as={Link} to='/signup'>SignUp</Nav.Link>
+              </>
+            }
             <div className="d-lg-none navbar-category">
               <LeftSideNav />
             </div>

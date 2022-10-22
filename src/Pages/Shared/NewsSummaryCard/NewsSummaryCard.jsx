@@ -1,10 +1,9 @@
-import { Link, useLoaderData } from "react-router-dom";
-import { Button, Card, Image } from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
 import { FaEye, FaRegBookmark, FaShareAlt, FaStar } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-const News = () => {
-  const news = useLoaderData();
-  const { category_id, title, author, details, image_url, rating, total_view } = news;
+const NewsSummaryCard = ({ news }) => {
+  const { _id, title, author, details, image_url, rating, total_view } = news;
 
   return (
     <Card className='mb-3 mb-lg-4'>
@@ -31,11 +30,13 @@ const News = () => {
         <Card.Title>{title}</Card.Title>
         <Card.Img variant='top' src={image_url} />
         <Card.Text>
-          {details}
+          {details.length > 200 ?
+            <>
+              {details.slice(0, 250)} ... <Link to={`/news/${_id}`}>Read more</Link>
+            </>
+            : details
+          }
         </Card.Text>
-        <Link to={`/category/${category_id}`}>
-          <Button variant="primary">All news in this category</Button>
-        </Link>
       </Card.Body>
       <Card.Footer className='d-flex justify-content-between align-items-center'>
         <div>
@@ -51,4 +52,4 @@ const News = () => {
   );
 }
 
-export default News;
+export default NewsSummaryCard;
