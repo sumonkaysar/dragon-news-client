@@ -37,22 +37,21 @@ const Header = () => {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link>
-              {
-                user?.photoURL ?
-                <Image
-                  src={user.photoURL}
-                  style={{ width: "30px" }}
-                  roundedCircle
-                /> :
-                
-                <FaUser />
-              }
-            </Nav.Link>
             {
               user?.uid ?
               <>
-                <Nav.Link>{user?.displayName}</Nav.Link>
+                <Nav.Link as={Link} to='/profile'>
+                  {
+                    user?.photoURL ?
+                    <Image
+                      src={user.photoURL}
+                      style={{ width: "30px" }}
+                      roundedCircle
+                    /> :
+                    <FaUser />
+                  }
+                </Nav.Link>
+                <Nav.Link as={Link} to='/profile'>{user?.displayName}</Nav.Link>
                 <Button
                   onClick={handleLogout}
                   className="py-0"
